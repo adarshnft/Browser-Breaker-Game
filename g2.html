@@ -1,0 +1,448 @@
+<html>
+<head><title>Browser Breaker | by Adarsh S</title>
+  </head>
+  <style type="text/css">
+  body {
+    background-color: #EDEDED;
+
+      font-family: Arial;
+    }
+</style>
+  <body><br><br><p align="center"><img src="browser breaker logo.png" align=center></p>
+  <center><br><br>
+<canvas id="myGameCanvas" width="1280" height="720" style="border:5px solid #0967CE " >Browser does not support</canvas></center>
+
+
+<script type="text/javascript">
+
+var app = {
+
+  init: function () {
+
+    this.canvas = document.querySelector('#myGameCanvas');
+    this.context = this.canvas ? this.canvas.getContext('2d') : null;
+
+    if (!this.context)
+    {
+      console.log("Error getting application context");
+      return;
+    }
+
+    window.addEventListener('keydown', controller.keypress, true);
+    this.setupBricks();
+    this.update();
+
+    return;
+
+  },
+
+  update: function () {
+
+    app.clearContext();
+
+    app.drawBricks();
+    player.draw();
+    ball.update();
+
+    requestAnimationFrame(app.update);
+  },
+
+  clearContext: function () {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    return;
+  },
+
+  die: function () {
+
+    player.lives -= 1;
+
+    if (player.lives < 1)
+    {
+      window.open("game over screen.html", "_self");
+
+
+      //ball.style.visibility="hidden";
+    }
+    //this.gameOver();
+    ball.reset();
+  },
+
+  won: function() {
+
+    player.score+=0;
+
+    if(player.score>950)
+    window.open("game end screen.html", "_self");
+
+  },
+
+
+  drawBricks: function () {
+
+    this.bricks.forEach(function (brick) {brick.draw();});
+
+  },
+
+  setupBricks: function () {
+
+    this.bricks = new Array();
+
+    var i = 0;
+    var brickTop = 50;
+    var brickBackLeft = 150;
+
+    //Setup back row:
+    for (i = 0; i < 9; i++)
+    {
+      var brick = new Brick();
+      brick.position.x = 150 + i * brick.size.width + i*55;
+      brick.position.y = brickTop*4.2;
+      brick.size.width=brick.size.width*2;
+      brick.size.height=brick.size.height*1.2;
+      brick.health = 1;
+      this.bricks.push(brick);
+    }
+
+    //Setup middle row:
+    for (i = 0; i < 15; i++)
+    {
+      var brick = new Brick();
+      brick.position.x = 180 + i * brick.size.width + i*10;
+      brick.position.y = brickTop*6.2 + brick.size.height + 1;
+      brick.size.width=brick.size.width;
+      brick.health = 2;
+      this.bricks.push(brick);
+    }
+
+    //Setup front row:
+    for (i = 0; i < 16; i++)
+    {
+      var brick = new Brick();
+      brick.position.x = 150 + i * brick.size.width + i*10;
+      brick.position.y = brickTop*7 + 2 * brick.size.height + 1;
+      brick.health = 3;
+      this.bricks.push(brick);
+    }
+
+    //windows titleshade
+    for (i = 0; i < 26; i++)
+    {
+      var brick = new Brick();
+      brick.position.x = 0+i* brick.size.width;
+      brick.position.y = 0;
+      brick.health = 4;
+      this.bricks.push(brick);
+    }
+
+  },
+
+  //gameOver: function () {
+    //window.alert("Score :"+ this.player.score "&nbsp GAME OVER");
+  //},
+
+  reset: function () {
+    player.reset();
+    ball.reset();
+    this.setupBricks();
+    //this.gameOver()''
+  },
+
+  bricks: [],
+
+  canvas: null,
+  context: null,
+  timeout: 33 };
+
+
+
+var controller = {
+
+  keypress: function (event) {
+
+    switch (event.keyCode) {
+      case 37:
+        player.moveLeft();
+        break;
+      case 39:
+        player.moveRight();
+        break;}
+
+
+  } };
+
+
+
+var player = {
+
+  // Defines initial position
+  position: {
+    x: 127,
+    y: 700 },
+
+
+  score: 0,
+
+  lives: 3,
+
+  physics: {
+    speed: 20 },
+
+
+  size: {
+    height: 15,
+    width: 150 },
+
+
+  draw: function () {
+    app.context.fillStyle = "#00A6F9";
+    app.context.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
+
+    app.context.textAlign = "center";
+    app.context.fillStyle = "rgba(0, 0, 0, .2)";
+
+    app.context.fillStyle = "Red";
+    app.context.font = "28px sans-serif";
+    app.context.fillText("Lives", 60, 60);
+    app.context.fillText("Score", 1200, 60);
+
+    app.context.fillStyle = "Red";
+    app.context.font = "48px sans-serif";
+    app.context.fillText(this.lives, 60, 110);
+    app.context.fillText(this.score, 1200, 110);
+
+    app.context.font = '25pt Calibri '; //No internet text code
+    app.context.fillStyle = ' black';
+    app.context.fillText("No Internet", 450, 200);
+
+    app.context.font = '17pt Calibri'; //bg text
+    app.context.fillText("You are not connected to the internet.", 600, 270);
+    app.context.fillText("Try checking the network cables, modem, and router.", 670, 330);
+    app.context.fillText("Try reconnecting to Wi-Fi.", 548, 400);
+
+    app.context.fillStyle = 'blue'; // bg text blue color
+    app.context.fillText("Run Windows Network Diagnostics.", 596, 470);
+
+    app.context.fillStyle = 'grey'; // bg text error code
+    app.context.font = '15pt Calibri';
+    app.context.fillText("Error Code : ERR_NETWORK_CONNECTION_FAILURE" , 500, 540);
+
+    app.context.beginPath(); //red circle
+    app.context.fillStyle = "#EF433A";
+    app.context.arc(13,13,7,0,2*Math.PI);
+    app.context.fill();
+
+    app.context.beginPath(); //yellow circle
+    app.context.fillStyle = "#EDCB3B";
+    app.context.arc(33,13,7,0,2*Math.PI);
+    app.context.fill();
+
+    app.context.beginPath(); //green circle
+    app.context.fillStyle = "#7FD845";
+    app.context.arc(53,13,7,0,2*Math.PI);
+    app.context.fill();
+
+  },
+
+  moveLeft: function () {
+    if (this.position.x > 0)
+    this.position.x -= this.physics.speed;
+  },
+
+  moveRight: function () {
+    if (this.position.x < app.canvas.width - this.size.width)
+    this.position.x += this.physics.speed;
+  },
+
+  reset: function () {
+    this.lives = 3;
+    this.score = 0;
+    this.position.x = 200;
+  } };
+
+
+
+var ball = {
+
+  position: {
+    x: 50,
+    y: 400 },
+
+
+  size: {
+    height: 20,
+    width: 20 },
+
+
+  physics: {
+    speed: 4 },
+
+
+  direction: {
+    x: 1, //Moving right
+    y: 1 //Moving down
+  },
+
+  draw: function () {
+    app.context.fillStyle = "black";
+    app.context.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
+  },
+
+  reset: function () {
+    this.position.x = 50;
+    this.position.y = 50;
+    this.direction.x = 1;
+    this.direction.y = 1;
+  },
+
+  update: function () {
+
+    if (this.position.x <= 0) //Left Bounds
+      this.direction.x = 1;
+    if (this.position.x >= app.canvas.width) //Right Bounds
+      this.direction.x = -1;
+    if (this.position.y <= 0) //Top Bounds
+      this.direction.y = 1;
+    if (this.position.y >= app.canvas.height) //Bottom Bounds
+      app.die();
+      app.won();
+
+    this.checkCollisionWithPlayer();
+    this.checkCollisionWithBricks();
+
+    this.position.x += this.physics.speed * this.direction.x;
+    this.position.y += this.physics.speed * this.direction.y;
+
+    this.draw();
+  },
+
+  checkCollisionWithPlayer: function () {
+
+    if (this.position.y + this.size.height < player.position.y)
+    return;
+    if (this.position.y > player.position.y + player.size.height)
+    return;
+    if (this.position.x > player.position.x + player.size.width)
+    return;
+    if (this.position.x + this.size.width < player.position.x)
+    return;
+
+    this.direction.y = -1; //Moving up now
+
+  },
+
+  checkCollisionWithBricks: function () {
+
+    var i = 0;
+    for (i = 0; i < app.bricks.length; i++)
+    {
+      var brick = app.bricks[i];
+
+      if (this.position.y + this.size.height < brick.position.y)
+      continue;
+      if (this.position.y > brick.position.y + brick.size.height)
+      continue;
+      if (this.position.x > brick.position.x + brick.size.width)
+      continue;
+      if (this.position.x + this.size.width < brick.position.x)
+      continue;
+
+
+      brick.health -= 1;
+
+      player.score += 5;
+
+      if (brick.health < 1)
+      app.bricks.splice(i, 1);
+
+      //Update direction based on where we hit the brick
+
+      //Moving towards lower right
+      if (this.direction.x == 1 &&
+      this.direction.y == 1)
+      {
+        if (this.position.y > brick.position.y)
+        this.direction.x = -1;else
+
+        this.direction.y = -1;
+      }
+      //Moving towards lower left
+      else if (this.direction.x == -1 &&
+        this.direction.y == 1)
+        {
+          if (this.position.y > brick.position.y)
+          this.direction.x = 1;else
+
+          this.direction.y = -1;
+        }
+        //Moving towards upper right
+        else if (this.direction.x == 1 &&
+          this.direction.y == -1)
+          {
+            if (this.position.y > brick.position.y)
+            this.direction.x = -1;else
+
+            this.direction.y = -1;
+          }
+          //Moving towards upper-left
+          else if (this.direction.x == -1 &&
+            this.direction.y == -1)
+            {
+              if (this.position.y > brick.position.y)
+              this.direction.x = 1;else
+
+              this.direction.y = -1;
+
+            }
+    }
+  } };
+
+
+
+var Brick = function () {
+
+  this.health = 4;
+
+  this.size = {
+    height: 30,
+    width: 50 };
+
+
+  //Will be determined on setup
+  this.position = {
+    x: 0,
+    y: 0 };
+
+
+};
+
+Brick.prototype.draw = function () {
+
+  switch (this.health) {
+    case 4:
+      app.context.fillStyle = "#0967CE"; //blue window shade
+      break;
+    case 3:
+      app.context.fillStyle = "#b9ff51"; //hard brick green
+      break;
+    case 2:
+      app.context.fillStyle = "#8fe52d"; //Medium brick green
+      break;
+    case 1:
+      app.context.fillStyle = "#7af442"; //soft brick green
+
+      break;}
+
+
+  if (this.health > 0)
+  app.context.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
+};
+
+
+
+app.init();
+
+
+
+</script>
+</body>
+</html>

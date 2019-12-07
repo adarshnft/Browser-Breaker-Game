@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>Browser breaker | by Adarsh S
+</title>
+</head>
+<style type="text/css">
+	body {
+		background-color: #EDEDED;
+		justify-content: center;
+ 	 	text-align: center;
+  		font-family: Arial;
+		}
+</style>
+<body>
+	<br><br><p align="center"><img src="browser breaker logo.png" align=center></p>
+	<center><br><br>
+<canvas height="720px" width="1280px" id="canvas" style="border:5px solid #0967CE ">
+if canvas will not support
+</canvas>
+
+<script>
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+
+
+ctx.fillStyle = "#0967CE"; //window title shade
+ctx.fillRect(0,0,2000,30);
+
+ctx.beginPath(); //red circle
+ctx.fillStyle = "#EF433A";
+ctx.arc(13,13,7,0,2*Math.PI);
+ctx.fill();
+
+ctx.beginPath(); //yellow circle
+ctx.fillStyle = "#EDCB3B";
+ctx.arc(33,13,7,0,2*Math.PI);
+ctx.fill();
+
+ctx.beginPath(); //green circle
+ctx.fillStyle = "#7FD845";
+ctx.arc(53,13,7,0,2*Math.PI);
+ctx.fill();
+
+ctx.fillStyle = "#FFFFFF"; //url title shade
+ctx.fillRect(380,350,500,30);
+
+var img = new Image();
+window.onload = function()
+{
+
+ctx.drawImage(img,480,230,290,100);
+
+};
+
+img.src = 'google.png';
+
+ctx.fillStyle = "#9EFF2E"; //url title shade
+ctx.font = '25pt Arial ';
+ctx.fillText("You are Online!",510,500);
+
+
+</script>
+</body>
+</html>
